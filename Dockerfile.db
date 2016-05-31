@@ -1,0 +1,6 @@
+FROM postgres:9.5.3
+MAINTAINER Julian Møller <docker@julianmoeller.dk>
+
+ENV PGDATA /data
+
+ADD db/setup.sql /docker-entrypoint-initdb.d/setup.sql

@@ -1,0 +1,13 @@
+FROM node:6.2.0-slim
+MAINTAINER Julian Møller <docker@julianmoeller.dk>
+
+RUN npm -q set progress=false
+
+ONBUILD RUN ln -s /app/node_modules /app/src/node_modules
+
+WORKDIR /app
+
+EXPOSE 3000
+
+#CMD ["sh", "-c", "pwd && ls -al ./node_modules"]
+CMD ["npm", "-q", "run", "dev"]

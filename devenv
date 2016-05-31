@@ -1,0 +1,39 @@
+#!/bin/bash
+
+set -e
+
+. ./scripts/_functions.sh
+
+depends_on docker
+depends_on docker-compose
+depends_on git
+depends_on npm
+depends_on node
+
+NVMFILE=$NVM_DIR/nvm.sh
+if [ ! -f "$NVMFILE" ]; then
+  failed_dep nvm
+fi
+export NVMFILE
+
+# END DEPENDENCY CHECKING
+
+if [ $# = 0 ]; then
+  SCRIPT="help"
+else
+  SCRIPT=$1
+  shift
+fi
+
+if [ "$SCRIPT" = "--help" ]; then
+  SCRIPT="help"
+fi
+
+SCRIPTFILE="./scripts/$SCRIPT.sh"
+
+if [ -x "$SCRIPTFILE" ]; then
+  $SCRIPTFILE "$@"
+else
+  echo "Unknown command: '$SCRIPT'"
+  exit 1
+fi

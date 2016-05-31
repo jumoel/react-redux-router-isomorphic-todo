@@ -1,0 +1,33 @@
+#!/usr/bin/env node
+
+/* eslint-disable no-console */
+const express = require('express');
+const morgan = require('morgan');
+
+const server = require('../dist/server/index').default;
+const clientStats = require('../dist/client/.stats.json');
+const publicPath = clientStats.publicPath;
+
+const app = express();
+const logger = morgan('combined');
+
+const hostname = process.env.HOSTNAME || '0.0.0.0';
+const port = process.env.PORT || 3000;
+
+const bundles = Object.keys(clientStats.assetsByChunkName)
+	.map(key => clientStats.assetsByChunkName[key])
+	.map(assets => Array.isArray(assets) ? assets[0] : assets)
+	.map(asset => publicPath + asset);
+
+app.use(logger);
+app.use(publicPath, express.static(__dirname + '/../dist/client'));
+app.use(server(bundles));
+
+app.listen(port, hostname, (err) => {
+  if (err) {
+    console.error(err);
+    return;
+  }
+
+  console.log(`Listening at http://${hostname}:${port}`);
+});

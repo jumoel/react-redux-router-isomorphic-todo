@@ -1,0 +1,37 @@
+version: "2"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/app
+    volumes_from:
+      - web_base
+    ports:
+      - "3000:3000"
+    depends_on:
+      - web_base
+
+  web_base:
+    build:
+      context: .
+      dockerfile: Dockerfile.base
+    volumes:
+      - node_modules:/app/node_modules
+
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile.db
+    ports:
+      - "5432:5432"
+    volumes:
+      - dbdata:/data
+
+volumes:
+  node_modules:
+    driver: local
+  dbdata:
+    driver: local

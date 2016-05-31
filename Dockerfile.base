@@ -1,0 +1,12 @@
+FROM node:6.2.0-slim
+MAINTAINER Julian Møller <docker@julianmoeller.dk>
+
+RUN npm -q set progress=false
+
+RUN mkdir -p /app
+WORKDIR /app
+
+COPY package.json .
+RUN npm -q install
+
+VOLUME /app/node_modules

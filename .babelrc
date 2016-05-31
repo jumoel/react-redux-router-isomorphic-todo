@@ -1,0 +1,9 @@
+{
+  "presets": ["react", "stage-1", "es2015"],
+
+  "plugins": [
+    "transform-class-properties",
+    "transform-object-rest-spread",
+		"react-hot-loader/babel"
+  ]
+}
